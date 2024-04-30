@@ -2,7 +2,7 @@
 
 function fetchAirData() {
     //Variable definieren mit $
-    $url = "https://api.openaq.org/v2/locations/7706";
+    $url = "https://api.openaq.org/v2/locations/1236033";
 
     // API Key - Replace 'YOUR_API_KEY_HERE' with your actual API key
     $apiKey = '00014d59177f3509bed1d271073c7d84b242745a430a4dd21bab697700cb4b91';

@@ -6,6 +6,7 @@ $jsonData = include('transform.php');
 // Dekodiert die JSON-Daten zu einem Array
 $dataArray = json_decode($jsonData, true);
 
+
 require_once 'config.php'; // Bindet die Datenbankkonfiguration ein
 
 try {
@@ -13,7 +14,7 @@ try {
     $pdo = new PDO($dsn, $username, $password, $options);
 
     // SQL-Query mit Platzhaltern für das Einfügen von Daten
-    $sql = "INSERT INTO AirQualityData (city, parameter, average, lastValue, unit, lastUpdated) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO AirQualityMeasurements (parameter, average, lastValue, unit, lastUpdated) VALUES (?, ?, ?, ?, ?)";
 
     // Bereitet die SQL-Anweisung vor
     $stmt = $pdo->prepare($sql);
@@ -21,7 +22,6 @@ try {
     // Fügt jedes Element im Array in die Datenbank ein
     foreach ($dataArray as $item) {
         $stmt->execute([
-            $item['city'],
             $item['parameter'],
             $item['average'],
             $item['lastValue'],
