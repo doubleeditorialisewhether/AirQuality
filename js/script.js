@@ -1,45 +1,73 @@
-let url = 'https://191734-3.web.fhgr.ch/php/unload.php';
+let url = 'https://191734-4.web.fhgr.ch/php/unload.php';
 let data;
 
 async function fetchData(url) {
-    try {
-        let response = await fetch(url);
-        let data = await response.json();
-        return data;
-    }
-    catch (error) {
-         console.log(error);
-     }
+  try {
+      let response = await fetch(url);
+      let data = await response.json();
+      console.log("API Response:", data); // Loggt die Rohdaten
+      return data;
+  }
+  catch (error) {
+      console.log("Fehler beim Abrufen der Daten:", error);
+      return {}; // Gibt ein leeres Objekt zurück, falls ein Fehler auftritt
+  }
 }
 
-//Alle Daten in eine Variable speichern
-async function init(){
-    let response = await fetch(url);
-    data = await response.json();   
-    console.log(data);
+// Funktion, um Daten zu filtern, die in den letzten 30 Tagen aktualisiert wurden
+function filterLast30Days(data) {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30); // 30 Tage zurück
+  let filteredData = [];
+  Object.values(data).forEach(entries => { // Durchläuft alle Parameter
+      entries.forEach(item => {
+          if (new Date(item.lastUpdated) >= thirtyDaysAgo) {
+              filteredData.push(item);
+          }
+      });
+  });
+  console.log("Filtered Data:", filteredData); // Loggt die gefilterten Daten
+  return filteredData;
+}
+
+async function init() {
+  let rawData = await fetchData(url);
+  if (Object.keys(rawData).length > 0) {
+      data = filterLast30Days(rawData);
+      if (data.length > 0) {
+          updateChart(data);
+      } else {
+          console.log('Keine Daten der letzten 30 Tage vorhanden.');
+      }
+  } else {
+      console.log('Keine Daten zum Anzeigen');
+  }
 }
 
 init();
 
-//Chart JS einbinden
+// Funktion zum Aktualisieren des Charts mit gefilterten Daten
+function updateChart(filteredData) {
+  const labels = filteredData.map(item => new Date(item.lastUpdated).toLocaleDateString()); // Erstellt Labels basierend auf 'lastUpdated'
+  const values = filteredData.map(item => item.lastValue); // Nutzt 'lastValue' als Datenpunkte für das Chart
 
-const airQuality = document.querySelector('#airQuality');
-
-  new Chart(airQuality, {
-    type: 'line',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
+  const ctx = document.querySelector('#airQuality').getContext('2d');
+  new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: labels,
+          datasets: [{
+              label: 'Gemessene Werte (lastValue)',
+              data: values,
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
       }
-    }
   });
+}
