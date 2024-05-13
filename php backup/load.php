@@ -1,7 +1,11 @@
 <?php
 
-// Transformations-Skript als 'transform.php' einbinden
-$transformedData = include('transform.php');
+// Transformations-Skript als '230_transform.php' einbinden
+$jsonData = include('transform.php');
+
+// Dekodiert die JSON-Daten zu einem Array
+$dataArray = json_decode($jsonData, true);
+
 
 require_once 'config.php'; // Bindet die Datenbankkonfiguration ein
 
@@ -10,20 +14,19 @@ try {
     $pdo = new PDO($dsn, $username, $password, $options);
 
     // SQL-Query mit Platzhaltern für das Einfügen von Daten
-    $sql = "INSERT INTO AirQualityZurich (relativehumidity_lastValue, pm1_lastValue, temperature_lastValue, pm25_lastValue, pm10_lastValue, last_updated) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO AirQualityMeasurements (parameter, average, lastValue, unit, lastUpdated) VALUES (?, ?, ?, ?, ?)";
 
     // Bereitet die SQL-Anweisung vor
     $stmt = $pdo->prepare($sql);
 
     // Fügt jedes Element im Array in die Datenbank ein
-    foreach ($transformedData as $item) {
+    foreach ($dataArray as $item) {
         $stmt->execute([
-            $item['relativehumidity_lastValue'],
-            $item['pm1_lastValue'],
-            $item['temperature_lastValue'],
-            $item['pm25_lastValue'],
-            $item['pm10_lastValue'],
-            $item['last_updated']
+            $item['parameter'],
+            $item['average'],
+            $item['lastValue'],
+            $item['unit'],
+            $item['lastUpdated']
         ]);
     }
 
