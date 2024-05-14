@@ -2,16 +2,18 @@ document.addEventListener('DOMContentLoaded', function() {
     let url = 'https://191734-4.web.fhgr.ch/php/unload.php';
     let chart;
 
+    // Funktion zum Abrufen der Daten von der URL
     async function fetchData(url) {
         try {
             let response = await fetch(url);
             return response.json();
         } catch (error) {
-            console.error('Error fetching data:', error);
+            console.error('Fehler beim Abrufen der Daten:', error);
             return null;
         }
     }
 
+    // Funktion zum Vorbereiten der Daten für das Diagramm
     async function prepareData(days) {
         let rawData = await fetchData(url);
         let labels = [];
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let now = new Date();
         let startDate = new Date(now.setDate(now.getDate() - days));
 
-        let allValues = []; // Sammeln aller Werte für die Bestimmung von Min und Max
+        let allValues = []; // Sammeln aller Werte für Min/Max-Berechnung
 
         if (!rawData) {
             return null;
@@ -39,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 pm10Values.push(dataEntries.reduce((acc, curr) => acc + curr.pm10_lastValue, 0) / dataEntries.length);
                 humidityValues.push(dataEntries.reduce((acc, curr) => acc + curr.relativehumidity_lastValue, 0) / dataEntries.length);
                 temperatureValues.push(dataEntries.reduce((acc, curr) => acc + curr.temperature_lastValue, 0) / dataEntries.length);
-                
+
                 allValues.push(...pm1Values, ...pm25Values, ...pm10Values, ...humidityValues, ...temperatureValues);
             }
         }
@@ -50,16 +52,17 @@ document.addEventListener('DOMContentLoaded', function() {
         return { labels, pm1Values, pm25Values, pm10Values, humidityValues, temperatureValues, minValue, maxValue };
     }
 
+    // Funktion zum Hinzufügen von Anmerkungen (vertikale Linien) im Diagramm
     function addAnnotations(chartData) {
         const annotations = [];
-        const oneDay = 24 * 60 * 60 * 1000; // Milliseconds in a day
+        const oneDay = 24 * 60 * 60 * 1000; // Millisekunden in einem Tag
         let current = new Date(chartData.labels[0]).getTime();
-        let startTime = current; // Speichern der Startzeit
-    
-        current += oneDay; // Beginnen mit dem Hinzufügen von Linien nach dem ersten Tag
-    
+        let startTime = current; // Startzeit speichern
+
+        current += oneDay; // Erste Linie nach einem Tag hinzufügen
+
         while (current <= new Date(chartData.labels[chartData.labels.length - 1]).getTime()) {
-            if (current !== startTime) { // Überspringen der ersten Linie
+            if (current !== startTime) { // Erste Linie überspringen
                 annotations.push({
                     type: 'line',
                     mode: 'vertical',
@@ -67,32 +70,33 @@ document.addEventListener('DOMContentLoaded', function() {
                     value: new Date(current).toISOString(),
                     borderColor: 'rgba(255, 255, 255, 0.5)', // Weiß mit 50% Transparenz
                     borderWidth: 1.5, // Breite der Linie
-                    borderDash: [10, 5] // Erzeugt gestrichelte Linien mit 10px Strich und 5px Lücke
+                    borderDash: [10, 5] // Gestrichelte Linie (10px Strich, 5px Lücke)
                 });
             }
             current += oneDay;
         }
-    
+
         return annotations;
     }
 
+    // Funktion zum Anzeigen des Diagramms
     async function initChart(days = 1) {
         let chartData = await prepareData(days);
         if (!chartData) {
-            console.error("Failed to load chart data.");
+            console.error("Fehler beim Laden der Diagrammdaten.");
             return;
         }
-    
+
         const ctx = document.querySelector('#airQuality').getContext('2d');
-    
-        // Zerstören des bestehenden Charts, falls vorhanden
+
+        // Bestehendes Diagramm löschen, falls vorhanden
         if (chart) {
             chart.destroy();
         }
-    
-        // Dynamisch das Aspect Ratio setzen
+
+        // Dynamisch das Seitenverhältnis setzen
         let aspectRatio = window.innerWidth <= 720 ? 1 : 2; // 1:1 auf mobilen Geräten, 2:1 auf größeren Bildschirmen
-    
+
         chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -107,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             options: {
                 maintainAspectRatio: true,
-                aspectRatio: aspectRatio, // Setzen des dynamischen Aspect Ratio
+                aspectRatio: aspectRatio, // Dynamisches Seitenverhältnis setzen
                 scales: {
                     x: {
                         type: 'time',
@@ -137,8 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 plugins: {
                     legend: {
                         labels: {
-                            usePointStyle: true, // Verwenden Sie PointStyle für die Legendenmarkierungen
-                            boxWidth: 10, // Sie können die Boxgröße anpassen
+                            usePointStyle: true, // Punktstil für Legendenmarkierungen verwenden
+                            boxWidth: 10, // Boxgröße anpassen
                             color: '#FFFFFF',
                         }
                     },
@@ -148,38 +152,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-    
-        // Event Listener für die Größenänderung des Fensters hinzufügen
+
+        // Event Listener für Fenstergrößenänderung hinzufügen
         window.addEventListener('resize', function() {
             updateChartAspectRatio();
         });
-    
-        // Initiale Aspect Ratio setzen
+
+        // Initiales Seitenverhältnis setzen
         updateChartAspectRatio();
     }
-    
-    
-    
+
+    // Funktion zum Aktualisieren des Seitenverhältnisses des Diagramms
     function updateChartAspectRatio() {
         const aspectRatio = window.innerWidth <= 720 ? 1 : 2; // 1:1 auf mobilen Geräten, 2:1 auf größeren Bildschirmen
         chart.options.aspectRatio = aspectRatio;
         chart.resize();
     }
-    
+
+    // Funktion zum Aktualisieren des Diagramms und der Button-Stile
     function updateChart(days, element) {
         initChart(days).then(() => {
-            // Reset the style of all buttons first
+            // Alle Buttons zuerst zurücksetzen
             document.querySelectorAll('.button-group button').forEach(btn => {
                 btn.classList.remove('btn-light');
                 btn.classList.add('btn-outline-light');
             });
-    
-            // Set the active button style
+
+            // Aktiven Button-Stil setzen
             element.classList.remove('btn-outline-light');
             element.classList.add('btn-light');
         });
     }
-    
+
+    // Event Listener für die Buttons hinzufügen
     document.getElementById('btn24h').addEventListener('click', function() {
         updateChart(1, this);
     });
@@ -189,6 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btn10d').addEventListener('click', function() {
         updateChart(10, this);
     });
-    
-    initChart(); // Initialize the chart with default value (last 24 hours)
+
+    initChart(); // Diagramm mit Standardwert (letzte 24 Stunden) anzeigen
 });
