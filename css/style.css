@@ -1,3 +1,84 @@
-main {
-    padding: 0 20%;
+*{
+    font-family: "Nunito Sans", sans-serif;
 }
+
+body {
+    background-color: #1f2b3d;
+    color: #fff;
+}
+
+h1 {
+    margin: 2.5rem 0 0.5rem 0;
+}
+
+h2 {
+    margin: 2.5rem 0 0.5rem 0;
+}
+
+.navbar-brand{
+    color: #fff;
+    margin: 0 30px;
+}
+
+.nav-link{
+    color: #fff!important;
+}
+
+.navbar-toggler{
+    margin-right: 10px;
+}
+
+.text-body-secondary {
+    color: #fff!important;
+}   
+
+/*Responsive*/
+    @media screen and (max-width:720px) {
+    main article{
+        width: 100%;
+        max-width: none;
+        padding: 0 10px;
+    }
+    .button-group button {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+    .nav-link{
+        text-align: center;
+    }
+    }
+
+    @media screen and (max-width:991px) {
+       
+        .nav-link{
+            text-align: center;
+            font-size: 1.1rem;
+            padding: 15px 0;
+        }
+
+    }
+    
+    @media screen and (max-width:1200px) {
+       
+        main {
+            padding: 0;
+            width: 80%;
+            max-width: 900px;
+            margin:0 auto;
+        }
+
+    }
+
+    @media screen and (min-width:1200px) {
+        main {
+            max-width: 1600px;
+            margin:0 auto;
+        }
+
+        main article{
+            max-width: 900px;
+            margin:0 auto;
+        }
+   
+    }
