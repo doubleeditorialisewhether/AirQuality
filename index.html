@@ -24,13 +24,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#Luftqualität">Luftqualität</a>
+                <a class="nav-link" href="#Luftqualitaet">Luftqualität</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#Feinstaub">Feinstaub</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#Prävention">Prävention</a>
+                <a class="nav-link" href="#Praegvention">Prävention</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="about.html">Über uns</a>
@@ -42,10 +42,9 @@
     </header>
     <main>
         <article>
-        <h1>Unsichtbare Eindringlinge</h1>
+        <h1 id="Luftqualitaet">Unsichtbare Eindringlinge</h1>
         <p>Feinstaubpartikel sind winzige, oft unsichtbare Eindringlinge, die deine Atemluft belasten und gesundheitliche Risiken bergen. Besonders in städtischen Gebieten wie Zürich kann die Feinstaubbelastung durch Verkehr, Industrie und Heizungen stark variieren.</p>
         <p>Unsere interaktive Grafik zeigt die Feinstaubbelastung in Zürich und ermöglicht es dir, die Daten der letzten 24 Stunden, 3 Tage oder 10 Tage zu vergleichen. Beobachte, wie sich die Belastung im Laufe der Zeit verändert, und erfahre mehr über die Faktoren, die zur Luftverschmutzung beitragen.</p>
-        <h3 id="Luftqualität">Entwicklung Luftqualität Zürich Letzigrund</h3>
         <div class="button-group" style="margin: 20px 0;">
           <button id="btn24h" class="btn btn-light">Letzte 24 Stunden</button>
           <button id="btn3d" class="btn btn-outline-light">Letzte 3 Tage</button>
@@ -54,30 +53,62 @@
         </article>
         <canvas id="airQuality"></canvas>
         <article>
-        <h2 id="Feinstaub">Feinstaub als unsichtbare Eindringlinge</h2>
-        <p>Feinstaub bezieht sich auf winzige Partikel in der Luft, die einen Durchmesser von weniger als 2,5 Mikrometern haben. Sie entstehen hauptsächlich durch Verbrennungsprozesse wie Autoabgase, Industrieemissionen, Verbrennung von Holz und landwirtschaftliche Aktivitäten. Feinstaubpartikel können tief in die Lunge eindringen und sogar in den Blutkreislauf gelangen, was ernsthafte gesundheitliche Probleme verursachen kann. Sie sind auch für die Beeinträchtigung der Luftqualität und die Sichtbarkeit verantwortlich. Die Überwachung und Reduzierung von Feinstaub ist daher ein wichtiger Bestandteil der Bemühungen um saubere Luft und den Schutz der öffentlichen Gesundheit.</p>
-        <h2 id="Prävention">Wie kann ich mich langfristig schützen?</h2>
-        <p>Feinstaub wird mithilfe spezieller Messgeräte erfasst, die die Anzahl und Größe der Partikel in der Luft bestimmen. Die gängigsten Messmethoden sind Gravimetrie, bei der Partikel auf Filtern gesammelt und gewogen werden, und optische Methoden, bei denen Lichtstreuung zur Partikelmessung genutzt wird.</p>
-
-        <h2 id="arten-von-feinstaub">Unterschiedliche Arten von Feinstaub</h2>
-        <p>Feinstaub wird nach Partikelgröße klassifiziert: PM10 umfasst Partikel mit einem Durchmesser von bis zu 10 Mikrometern, PM2.5 Partikel bis zu 2,5 Mikrometern. Quellen für PM10 sind Straßenverkehr und Bauarbeiten, während PM2.5 vor allem aus Verbrennungsprozessen wie Fahrzeugabgasen und Industrieemissionen stammt.</p>
-
-        <h2 id="gesundheitsauswirkungen">Gesundheitsauswirkungen</h2>
-        <p>Feinstaub kann Atemwegserkrankungen wie Asthma und Bronchitis verschlimmern und das Risiko für Herz-Kreislauf-Probleme erhöhen. Langfristige Exposition kann zu ernsthaften Gesundheitsproblemen führen, einschließlich Lungenkrebs und vorzeitiger Todesfälle.</p>
-
-        <h2 id="erfahrungen-und-tipps">Erfahrungen und Tipps</h2>
-        <p>Teile deine Erfahrungen und Tipps zur Reduzierung der Feinstaubbelastung mit unserer Community. Diskutiere mit anderen Besuchern über effektive Maßnahmen und erhalte nützliche Ratschläge für den Alltag.</p>
+        <h2 id="Feinstaub">Was sind PM1, PM2.5 und PM10?</h2>
+        <p>PM steht für "Particulate Matter" oder Partikelmaterie und bezieht sich auf eine Mischung aus winzigen Partikeln und Tröpfchen, die in der Luft schweben. Die Klassifizierung dieser Partikel erfolgt nach ihrer Größe, daher beziehen sich die Begriffe PM1, PM2.5 und PM10 auf die maximalen Durchmesser der Partikel.</p>
+        <ul>
+            <li>PM1: Partikel mit einem Durchmesser von weniger als 1 Mikrometer.</li>
+            <li>PM2.5: Partikel mit einem Durchmesser von weniger als 2,5 Mikrometern.</li>
+            <li>PM10: Partikel mit einem Durchmesser von weniger als 10 Mikrometern.</li>
+        </ul>
+        <img id="bild_feinstaub" src="img/grafik_feinstaub.png" alt="Feinstaub Grafik">
+        <h2>Wie entstehen Feinstaubpartikel?</h2>
+        <p>In der Schweiz stammen Feinstaubpartikel (PM1, PM2.5, PM10) aus verschiedenen menschlichen und natürlichen Quellen:</p>
+        <p><strong>Menschliche Aktivitäten:</strong></p>
+        <ul>
+            <li>Straßenverkehr (PM10, PM2.5): Emissionen aus Diesel-Fahrzeugen sowie Abrieb von Reifen und Bremsen.</li>
+            <li>Industrie (PM10, PM2.5, PM1): Emissionen aus Metallverarbeitung und Zementherstellung.</li>
+            <li>Heizsysteme (PM2.5, PM10): Verbrennung von Holz und anderen festen Brennstoffen.</li>
+            <li>Landwirtschaft (PM2.5): Ammoniak-Emissionen, die zu sekundärem Feinstaub führen.</li>
+            <li>Bauwesen (PM10): Staub von Baustellen durch den Umgang mit Sand und Zement.</li>
+        </ul>
+        <p><strong>Natürliche Quellen:</strong></p>
+        <ul>
+            <li>Pollen und Sporen (PM10): Biologische Partikel, die saisonal in die Luft gelangen.</li>
+            <li>Wald- und Buschbrände (PM2.5, PM10): Natürliche Feuer, die Feinstaub freisetzen.</li>
+            <li>Bodenerosion (PM10): Aufwirbelung von Bodenpartikeln durch Wind.</li>
+        </ul>
+        <h2>Gibt es einen Zusammenhang zwischen der Temperatur, Luftfeuchtigkeit und der Feinstaubkonzentration?</h2>
+        <br>
+        <ol>
+            <li>
+                <p><strong>Tiefe Temperaturen und Heizung:</strong> In kalten Regionen, wenn die Temperaturen sinken, steigt die Nachfrage nach Heizung. Wenn fossile Brennstoffe wie Kohle, Öl oder Holz verbrannt werden, um Wärme zu erzeugen, erhöht dies die Freisetzung von Feinstaub in die Luft. Dieser Feinstaub besteht aus Partikeln, die während des Verbrennungsprozesses erzeugt werden, und kann dazu beitragen, dass die Feinstaubbelastung in der Luft zunimmt.</p>
+            </li>
+            <li>
+                <p><strong>Hohe Temperaturen und chemische Reaktionen:</strong> Bei höheren Temperaturen können chemische Reaktionen in der Atmosphäre intensiver ablaufen. Dies kann zur Bildung von Feinstaub beitragen, insbesondere wenn bestimmte Vorläufersubstanzen wie Stickoxide vorhanden sind. Diese Reaktionen können zu einer erhöhten Konzentration von Feinstaubpartikeln führen, die dann in der Luft suspendiert werden.</p>
+            </li>
+            <li>
+                <p><strong>Feuchtigkeit und Partikelagglomeration:</strong> Hohe Feuchtigkeit kann dazu führen, dass Feinstaubpartikel miteinander agglomerieren und größere Partikel bilden. Diese größeren Partikel können schneller aus der Luft ausfallen oder sedimentieren, was zu einer Verringerung der Feinstaubkonzentration in der Atmosphäre führt. Feuchtigkeit kann auch chemische Prozesse beeinflussen, die zur Bildung von Feinstaub beitragen, indem sie die Reaktionsbedingungen verändert.</p>
+            </li>
+        </ol>
+<h2 id="Praegvention">Wie kann ich mich langfristig schützen?</h2>
+        <p><ul>
+            <li>Nutze öffentliche Verkehrsmittel: Verringere deine Autofahrten.</li>
+            <li>Bilde Fahrgemeinschaften: Reduziere die Anzahl der Autos auf den Straßen, indem du Fahrten teilst.</li>
+            <li>Fördere Grünflächen: Pflanze Bäume oder unterstütze lokale Begrünungsprojekte.</li>
+            <li>Mach bei lokalen Initiativen mit: Engagiere dich in Projekten zur Luftreinhaltung.</li>
+            <li>Vermeide intensive Aktivitäten bei hoher Belastung: Meide körperliche Betätigungen im Freien, wenn hohe Schadstoffwerte gemeldet sind.</li>
+        </ul>
         </article>
     </main>
-        <footer class="py-3 my-4">
-            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-              <li class="nav-item"><a href="#Luftqualität" class="nav-link px-2 text-body-secondary">Luftqualität</a></li>
-              <li class="nav-item"><a href="#Feinstaub" class="nav-link px-2 text-body-secondary">Feinstaub</a></li>
-              <li class="nav-item"><a href="#Prävention" class="nav-link px-2 text-body-secondary">Prävention</a></li>
-              <li class="nav-item"><a href="about.html" class="nav-link px-2 text-body-secondary">Über uns</a></li>
-            </ul>
-            <p class="text-center text-body-secondary">© 2024 Airquality, Inc</p>
-        </footer>
+    <footer class="py-3 my-4">
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="#Luftqualitaet" class="nav-link px-2 text-body-secondary">Luftqualität</a></li>
+            <li class="nav-item"><a href="#Feinstaub" class="nav-link px-2 text-body-secondary">Feinstaub</a></li>
+            <li class="nav-item"><a href="#Praegvention" class="nav-link px-2 text-body-secondary">Prävention</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link px-2 text-body-secondary">Über uns</a></li>
+        </ul>
+        <p class="text-center text-body-secondary">© 2024 Airquality, Inc</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/script.js"></script>
 </body>

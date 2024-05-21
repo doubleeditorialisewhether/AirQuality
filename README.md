@@ -40,7 +40,6 @@ SELECT
 FROM AirQualityMeasurements
 GROUP BY lastUpdated;
 
-
 Chart Auswahl: 
 Das Auswählen des richtigen Chart war nicht einfach. Wir mussten uns zuerst in die Thematik einlesen. Ebenso wollten wir alle Werte in einem Chart darstellen, was eine zustätzliche Herausforderung war.
 Figma: Der Umgang mit Figma war neu und erforderte eine Umstellung.

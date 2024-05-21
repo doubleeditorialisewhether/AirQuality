@@ -15,6 +15,11 @@ h2 {
     margin: 2.5rem 0 0.5rem 0;
 }
 
+#bild_feinstaub {
+    width: 100%;
+    max-width: 500px;
+}
+
 .navbar-brand{
     color: #fff;
     margin: 0 30px;
