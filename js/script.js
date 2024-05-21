@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let timestamp in rawData) {
             let date = new Date(timestamp);
             if (date >= startDate) {
-                labels.push(timestamp);
+                labels.push(date.toISOString());
                 let dataEntries = rawData[timestamp];
                 pm1Values.push(dataEntries.reduce((acc, curr) => acc + curr.pm1_lastValue, 0) / dataEntries.length);
                 pm25Values.push(dataEntries.reduce((acc, curr) => acc + curr.pm25_lastValue, 0) / dataEntries.length);
@@ -56,24 +56,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function addAnnotations(chartData) {
         const annotations = [];
         const oneDay = 24 * 60 * 60 * 1000; // Millisekunden in einem Tag
-        let current = new Date(chartData.labels[0]).getTime();
-        let startTime = current; // Startzeit speichern
-
-        current += oneDay; // Erste Linie nach einem Tag hinzufügen
+        let current = new Date(chartData.labels[0]).setHours(0, 0, 0, 0); // Setzt auf 00:00 Uhr des ersten Tages
 
         while (current <= new Date(chartData.labels[chartData.labels.length - 1]).getTime()) {
-            if (current !== startTime) { // Erste Linie überspringen
-                annotations.push({
-                    type: 'line',
-                    mode: 'vertical',
-                    scaleID: 'x',
-                    value: new Date(current).toISOString(),
-                    borderColor: 'rgba(255, 255, 255, 0.5)', // Weiß mit 50% Transparenz
-                    borderWidth: 1.5, // Breite der Linie
-                    borderDash: [10, 5] // Gestrichelte Linie (10px Strich, 5px Lücke)
-                });
-            }
-            current += oneDay;
+            annotations.push({
+                type: 'line',
+                mode: 'vertical',
+                scaleID: 'x',
+                value: new Date(current).toISOString(),
+                borderColor: 'rgba(255, 255, 255, 0.5)', // Weiß mit 50% Transparenz
+                borderWidth: 1.5, // Breite der Linie
+                borderDash: [10, 5] // Gestrichelte Linie (10px Strich, 5px Lücke)
+            });
+            current += oneDay; // Nächsten Tag hinzufügen
         }
 
         return annotations;
@@ -126,7 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             display: true,
                             text: 'Zeitachse (Alte Daten → Neue Daten)',
                             color: '#FFFFFF'
-                        }
+                        },
+                        min: chartData.labels[0], // Anfang der Achse auf den ersten relevanten Datensatz setzen
+                        max: chartData.labels[chartData.labels.length - 1] // Ende der Achse auf den letzten relevanten Datensatz setzen
                     },
                     y: {
                         suggestedMin: chartData.minValue - 10,
